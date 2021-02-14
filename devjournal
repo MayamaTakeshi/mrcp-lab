@@ -1,0 +1,30 @@
+==========================================================================================
+2021/02/14 takeshi:
+
+Draft:
+
+We should have:
+
+mrcp-lab:
+  - methods:
+    - create_server : create MRCP server (includes both SIP and MRCP endpoints)
+    - create_call : creates a SIP call
+    - connect: connect to MRCP server (can only be called after 'answer'). We could integrate this automatically with the SIP processing. However, since this is a testing tool we want to be able to do things like delay the MRCP connection, close the MRCP connection while MRCP request is being processed etc.
+    - disconnect: closes the MRCP connection
+    - send (sends MRCP request)
+    - terminate (sends CANCEL (if '100 Trying' was received) or BYE)
+
+    - accept: sends '100 Trying'
+    - answer: sends '200 OK'
+    - refuse: sends non-200 OK
+
+  - events:
+      'accepted' (100 Trying)
+      'answered' (200 OK)
+      'msg' (MRCP message: response or event)
+      'end' (BYE, non-2XX)
+      'new_call': new call arrived to the server
+
+We will use sip.js for the SIP stack and mrcp for the MRCP stack.
+
+About SIP CANCEL check: https://github.com/kirm/sip.js/issues/14
